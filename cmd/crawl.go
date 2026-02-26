@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/vincentmaurin/firecrawl-cli/client"
+	"github.com/the20100/firecrawl-cli/client"
 )
 
 var crawlCmd = &cobra.Command{

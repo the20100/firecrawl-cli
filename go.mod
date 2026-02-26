@@ -1,4 +1,4 @@
-module github.com/vincentmaurin/firecrawl-cli
+module github.com/the20100/firecrawl-cli
 
 go 1.21
 

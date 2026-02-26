@@ -1,6 +1,6 @@
 package main
 
-import "github.com/vincentmaurin/firecrawl-cli/cmd"
+import "github.com/the20100/firecrawl-cli/cmd"
 
 func main() {
 	cmd.Execute()
