@@ -5,6 +5,7 @@ A Go CLI for the [Firecrawl API](https://firecrawl.dev). Supports scraping, sear
 ## Installation
 
 ```bash
+git clone https://github.com/the20100/firecrawl-cli
 cd firecrawl-cli
 go build -o firecrawl .
 mv firecrawl /usr/local/bin/  # or anywhere in your PATH
@@ -256,6 +257,18 @@ firecrawl credit-usage --json
 
 ---
 
+### `update` — Self-update
+
+Pull the latest source from GitHub, rebuild, and replace the current binary.
+
+```bash
+firecrawl update
+```
+
+Requires `git` and `go` to be installed.
+
+---
+
 ## Global flags
 
 | Flag | Description |
@@ -281,5 +294,6 @@ firecrawl-cli/
     ├── crawl.go
     ├── map.go
     ├── agent.go
-    └── credits.go
+    ├── credits.go
+    └── update.go      # self-update
 ```
