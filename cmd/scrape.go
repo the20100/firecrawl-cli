@@ -15,7 +15,7 @@ var scrapeCmd = &cobra.Command{
 	Short: "Scrape a webpage and extract its content",
 	Long: `Scrape a URL and extract content in various formats.
 
-Supports markdown, HTML, links, screenshots, branding, and structured JSON extraction
+Supports markdown, HTML, links, screenshots, images, branding, and structured JSON extraction
 via a custom schema (--schema or --schema-file).
 
 Examples:
@@ -52,7 +52,7 @@ func init() {
 	rootCmd.AddCommand(scrapeCmd)
 
 	f := scrapeCmd.Flags()
-	f.StringSliceVarP(&scrapeFormats, "format", "f", []string{"markdown"}, "Output formats: markdown,html,rawHtml,links,screenshot,branding,json")
+	f.StringSliceVarP(&scrapeFormats, "format", "f", []string{"markdown"}, "Output formats: markdown,html,rawHtml,links,screenshot,images,branding,json")
 	f.BoolVar(&scrapeOnlyMain, "only-main-content", false, "Remove navigation, footers, and sidebars")
 	f.StringSliceVar(&scrapeIncludeTags, "include-tags", nil, "HTML tags to include (e.g. article,main)")
 	f.StringSliceVar(&scrapeExcludeTags, "exclude-tags", nil, "HTML tags to exclude (e.g. nav,footer)")
@@ -193,6 +193,13 @@ func buildScrapeOutput(resp *client.ScrapeResponse) string {
 		sb.WriteString("\n---LINKS---\n")
 		for _, l := range resp.Data.Links {
 			sb.WriteString(l + "\n")
+		}
+	}
+
+	if len(resp.Data.Images) > 0 {
+		sb.WriteString("\n---IMAGES---\n")
+		for _, img := range resp.Data.Images {
+			sb.WriteString(img + "\n")
 		}
 	}
 
