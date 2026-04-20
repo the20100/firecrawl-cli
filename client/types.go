@@ -30,6 +30,7 @@ type ScrapeData struct {
 	RawHTML    string          `json:"rawHtml,omitempty"`
 	Links      []string        `json:"links,omitempty"`
 	Screenshot string          `json:"screenshot,omitempty"`
+	Branding   json.RawMessage `json:"branding,omitempty"`
 	Extract    json.RawMessage `json:"extract,omitempty"`
 	Metadata   *ScrapeMetadata `json:"metadata,omitempty"`
 }

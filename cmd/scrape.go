@@ -15,12 +15,13 @@ var scrapeCmd = &cobra.Command{
 	Short: "Scrape a webpage and extract its content",
 	Long: `Scrape a URL and extract content in various formats.
 
-Supports markdown, HTML, links, screenshots, and structured JSON extraction
+Supports markdown, HTML, links, screenshots, branding, and structured JSON extraction
 via a custom schema (--schema or --schema-file).
 
 Examples:
   firecrawl scrape https://example.com
   firecrawl scrape https://example.com --format markdown,html
+  firecrawl scrape https://example.com --format branding,screenshot,links
   firecrawl scrape https://example.com --format json --schema '{"type":"object","properties":{"title":{"type":"string"}}}'
   firecrawl scrape https://example.com --schema-file schema.json --format markdown,json
   firecrawl scrape https://example.com --only-main-content --parser pdf
@@ -51,7 +52,7 @@ func init() {
 	rootCmd.AddCommand(scrapeCmd)
 
 	f := scrapeCmd.Flags()
-	f.StringSliceVarP(&scrapeFormats, "format", "f", []string{"markdown"}, "Output formats: markdown,html,rawHtml,links,screenshot,json")
+	f.StringSliceVarP(&scrapeFormats, "format", "f", []string{"markdown"}, "Output formats: markdown,html,rawHtml,links,screenshot,branding,json")
 	f.BoolVar(&scrapeOnlyMain, "only-main-content", false, "Remove navigation, footers, and sidebars")
 	f.StringSliceVar(&scrapeIncludeTags, "include-tags", nil, "HTML tags to include (e.g. article,main)")
 	f.StringSliceVar(&scrapeExcludeTags, "exclude-tags", nil, "HTML tags to exclude (e.g. nav,footer)")
@@ -192,6 +193,16 @@ func buildScrapeOutput(resp *client.ScrapeResponse) string {
 		sb.WriteString("\n---LINKS---\n")
 		for _, l := range resp.Data.Links {
 			sb.WriteString(l + "\n")
+		}
+	}
+
+	if len(resp.Data.Branding) > 0 && string(resp.Data.Branding) != "null" {
+		sb.WriteString("\n---BRANDING---\n")
+		pretty, err := json.MarshalIndent(resp.Data.Branding, "", "  ")
+		if err == nil {
+			sb.WriteString(string(pretty) + "\n")
+		} else {
+			sb.WriteString(string(resp.Data.Branding) + "\n")
 		}
 	}
 
